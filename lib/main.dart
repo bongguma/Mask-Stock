@@ -48,9 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       // 변경된 상태일 때 화면을 다시 그려야함 -
-      // 동일한 데이터가 쌓일 수 있으므로 한 번 clear 진
+      // 동일한 데이터가 쌓일 수 있으므로 한 번 clear 진행
       storeList!.clear();
-      storeListData.foreach((jsonData) {
+
+      storeListData.forEach((jsonData) {
         storeList!.add(Store.fromJson(jsonData));
       });
 
@@ -69,6 +70,48 @@ class _MyHomePageState extends State<MyHomePage> {
     fetch();
   }
 
+  Widget _buildremainState(Store store) {
+    var remainState = '판매중지';
+    var description = '';
+    var color = Colors.black;
+
+    switch (store.remainStat) {
+      case 'plenty':
+        remainState = '충분';
+        description = '100개 이상';
+        color = Colors.green;
+        break;
+      case 'some':
+        remainState = '보통';
+        description = '30개 이상';
+        color = Colors.yellow;
+        break;
+      case 'few':
+        remainState = '부족';
+        description = '2~30개';
+        color = Colors.red;
+        break;
+      case 'empty':
+        remainState = '소진임박';
+        description = '1개 이하';
+        color = Colors.grey;
+        break;
+    }
+
+    return Column(
+      children: <Widget>[
+        Text(
+          remainState,
+          style: TextStyle(color: color, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          description,
+          style: TextStyle(color: color),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,88 +127,38 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ListTile(
                   title: Text(store.name!),
                   subtitle: Text(store.addr!),
-                  trailing: _buildremainState(
-                    store: store,
-                  ),
+                  trailing: _buildremainState(store),
                 );
               }).toList(),
             )
-          : loadingBar(),
-    );
-  }
-
-  Widget _buildremainState(Store store) {
-    var remainState = '판매중지';
-    var description = '';
-    var color = Colors.black;
-
-    switch (store.remainStat) {
-      case 'plenty' :
-        remainState = '충분';
-        description = '100개 이상';
-        color = Colors.green;
-        break;
-      case 'some' :
-        remainState = '보';
-        description = '30개 이상';
-        color = Colors.yellow;
-        break;
-      case 'few' :
-        remainState = '부';
-        description = '2~30개';
-        color = Colors.red;
-        break;
-      case 'empty' :
-        remainState = '소진임';
-        description = '1개 이하';
-        color = Colors.grey;
-        break;
-    }
-
-    return Column(
-      children: <Widget>[
-        Text(remainState, style: TextStyle(color: color, fontWeight: FontWeight.bold),),
-        Text(description, style: TextStyle(color: color),),
-      ],
+          : LoadingBar(),
     );
   }
 }
 
-class _buildremainState extends StatelessWidget {
-  final Store store;
-
-  _buildremainState({Key? key, required this.store}) : super(key: key);
-
+class LoadingBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(store.remainStat ?? '매진'),
-      ],
-    );
-  }
-}
-
-class loadingBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('데이터를 불러오는 중 ...'),
-        SizedBox(
-          height: 10.0,
-        ),
-        CircularProgressIndicator(),
-      ],
+    return Container(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('데이터를 불러오는 중 ...'),
+          SizedBox(
+            height: 10.0,
+          ),
+          CircularProgressIndicator(),
+        ],
+      ),
     );
   }
 }
 
 /*
-* widget 분리 시, function으 분리하는 것보다 class로 분리한다.
+* widget 분리 시, function으로 분리하는 것보다 class로 분리한다.
 * function은 widget tree가 인식하지 못 한다는 단점과
-* function으로 rebuild 시, function 전체가 reubild된다.
+* function으로 rebuild 시, function 전체가 reubild 된다.
 * class 분리에는 rebuild 시, 재빌드 되야하는 부분만 재빌드된다.
 * */
 class TestTextContainer extends StatelessWidget {
@@ -173,7 +166,6 @@ class TestTextContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       child: TextButton(
         onPressed: () async {
