@@ -137,13 +137,15 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class LoadingBar extends StatelessWidget {
+  const LoadingBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Text('데이터를 불러오는 중 ...'),
           SizedBox(
             height: 10.0,
