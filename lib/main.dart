@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mask_stock/model/store.dart';
@@ -116,14 +115,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('마스크 재고 존재 장소 전체 : ${storeList!.length}'),
+        title: Text('마스크 재고 존재 장소 전체 : ${storeList!.where((store) {
+          return store.remainStat == 'plenty' ||
+              store.remainStat == 'same' ||
+              store.remainStat == 'same';
+        }) .length}'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: fetch),
         ],
       ),
       body: !isLoading
           ? ListView(
-              children: storeList!.map((store) {
+              children: storeList!.where((store) {
+                return store.remainStat == 'plenty' ||
+                    store.remainStat == 'same' ||
+                    store.remainStat == 'same';
+              }) // where 조건에 맞는 데이터만 map으로 list 변환된다.
+                  .map((store) {
                 return ListTile(
                   title: Text(store.name!),
                   subtitle: Text(store.addr!),
