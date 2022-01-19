@@ -10,6 +10,17 @@
 3. Provider를 활용한 상태 관리
 4. 구글 지도 오픈 라이브러리를 활용한 기술
 
+#### MVVM (Model - View - ViewModel) 패턴
+[View] - 사용자에게 보여주는 UI 부문
+          - 사용자의 동작이나 각종 처리는 ViewModel에서 이루어진다.
+[ViewModel] - Model을 View에 표시하기 위한 처리를 하는 부문
+                - View로 부터 미션 받은 처리를 Model에게 전달해줄 수 있다.
+                - Model로 받은 처리 결과를 View에 전달해줄 수 있다.
+[Model] - 데이터와 데이터를 처리하는 부문
+            - ViewModel로 부터 받은 미션을 해결하는 로직 작업을 진행한다.
+            - DB, File로 부터 데이터를 가져오거나 전송해주는 역할을 한다. 
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
