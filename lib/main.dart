@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:mask_stock/model/store.dart';
+import 'package:mask_stock/service/store_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,45 +27,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final storeService = StoreService();
   List<Store>? storeList = [];
-  var isLoading = true;
-
-  Future fetch() async {
-    setState(() {
-      // loadingBar가 다시 그려져야하기 떄문에 -
-      isLoading = true;
-    });
-    var uri =
-        'https://gist.githubusercontent.com/junsuk5/bb7485d5f70974deee920b8f0cd1e2f0/raw/063f64d9b343120c2cb01a6555cf9b38761b1d94/sample.json?name=%EB%8C%80%EC%A7%80%EC%95%BD%EA%B5%AD';
-
-    // get 방식이 비동기로 받아와 await 키워드가 존재하지 않을 시, response값 안에 데이터가 없을 수도 있다.
-    var response = await http.get(Uri.parse(uri));
-
-    final jsonResult = jsonDecode(utf8.decode(response.bodyBytes));
-    final storeListData = jsonResult['stores'];
-
-    setState(() {
-      // 변경된 상태일 때 화면을 다시 그려야함 -
-      // 동일한 데이터가 쌓일 수 있으므로 한 번 clear 진행
-      storeList!.clear();
-
-      storeListData.forEach((jsonData) {
-        storeList!.add(Store.fromJson(jsonData));
-      });
-
-      isLoading = false;
-    });
-
-    // log('Response statusCode :: ${response.statusCode}');  // 성공여부
-    // log('Response body :: ${response.body}');  // 통신 데이터 출력
-    // log('storeList json result :: ${jsonResult['stores']}'); // json형식 storeList
-  }
+  var isLoading  = false;
 
   @override
   void initState() {
     super.initState();
 
-    fetch();
+    // then -> fetch 함수가 이뤄진 다음 이루어져야하는 부분
+    storeService.fetch().then((fetchStores) {
+      setState(() {
+        storeList = fetchStores;
+      });
+    });
   }
 
   Widget _buildremainState(Store store) {
@@ -121,7 +95,13 @@ class _MyHomePageState extends State<MyHomePage> {
               store.remainStat == 'same';
         }) .length}'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.refresh), onPressed: fetch),
+          IconButton(icon: Icon(Icons.refresh), onPressed: () {
+            storeService.fetch().then((fetchStores) {
+              setState(() {
+                storeList = fetchStores;
+              });
+            });
+          } ),
         ],
       ),
       body: !isLoading
