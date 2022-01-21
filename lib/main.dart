@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mask_stock/model/store.dart';
-import 'package:mask_stock/service/store_service.dart';
+import 'package:mask_stock/viewmodel/store_vm.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(ChangeNotifierProvider.value(value: StoreViewModel(), child: MyApp(),));
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -21,27 +21,20 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+class MyHomePage extends StatelessWidget {
 
-class _MyHomePageState extends State<MyHomePage> {
-  final storeService = StoreService();
-  List<Store>? storeList = [];
-  var isLoading  = false;
 
-  @override
-  void initState() {
-    super.initState();
+    // @override
+    // void initState() {
+    //   super.initState();
 
     // then -> fetch 함수가 이뤄진 다음 이루어져야하는 부분
-    storeService.fetch().then((fetchStores) {
-      setState(() {
-        storeList = fetchStores;
-      });
-    });
-  }
+    //   storeService.fetch().then((fetchStores) {
+    //     setState(() {
+    //       storeList = fetchStores;
+    //     });
+    //   });
+    // }
 
   Widget _buildremainState(Store store) {
     var remainState = '판매중지';
@@ -87,26 +80,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final storeViewModel = Provider.of<StoreViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('마스크 재고 존재 장소 전체 : ${storeList!.where((store) {
+        title: Text('마스크 재고 존재 장소 전체 : ${storeViewModel.storeList.where((store) {
           return store.remainStat == 'plenty' ||
               store.remainStat == 'same' ||
               store.remainStat == 'same';
         }) .length}'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: () {
-            storeService.fetch().then((fetchStores) {
-              setState(() {
-                storeList = fetchStores;
-              });
-            });
+            // 새로고침 기능
+            storeViewModel.fetch();
           } ),
         ],
       ),
-      body: !isLoading
+      body: !storeViewModel.isLoading
           ? ListView(
-              children: storeList!.where((store) {
+              children: storeViewModel.storeList.where((store) {
                 return store.remainStat == 'plenty' ||
                     store.remainStat == 'same' ||
                     store.remainStat == 'same';

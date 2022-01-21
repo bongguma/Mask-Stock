@@ -27,7 +27,7 @@ class StoreService {
       // storeList!.clear();  // 매번 fetch 함수를 호출 할 때 마다 재선언을 해주므로 clear는 필요 없는 부분
 
       storeListData.forEach((jsonData) {
-        storeList!.add(Store.fromJson(jsonData));
+        storeList.add(Store.fromJson(jsonData));
       });
 
       // isLoading = false;
@@ -37,7 +37,7 @@ class StoreService {
     // log('Response body :: ${response.body}');  // 통신 데이터 출력
     // log('storeList json result :: ${jsonResult['stores']}'); // json형식 storeList
 
-    return storeList!;
+    return storeList;
   }
 
 }
