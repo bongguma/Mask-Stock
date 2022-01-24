@@ -13,7 +13,7 @@ class _SearchState extends State<SearchScreen> {
   Widget searchIcon() {
     return Icon(
       Icons.search,
-      color: Colors.white60,
+      color: Colors.black,
       size: 20.0,
     );
   }
@@ -25,15 +25,25 @@ class _SearchState extends State<SearchScreen> {
       body: SafeArea(
           child: Column(
         children: [
-          TextField(
-            controller: _searchTc,
-            decoration: InputDecoration(
-              prefixIcon: searchIcon(),
-              hintText: '검색',
+          Container(
+            padding:
+                EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: TextField(
+                    controller: _searchTc,
+                    decoration: InputDecoration(
+                      suffixIcon: searchIcon(),
+                      hintText: '검색',
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+              ],
             ),
-            onTap: () {},
           ),
-          // ListView(),
         ],
       )),
     );
