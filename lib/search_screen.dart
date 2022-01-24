@@ -8,6 +8,16 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchState extends State<SearchScreen> {
+  final TextEditingController _searchTc = TextEditingController();
+
+  Widget searchIcon() {
+    return Icon(
+      Icons.search,
+      color: Colors.white60,
+      size: 20.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,16 +25,15 @@ class _SearchState extends State<SearchScreen> {
       body: SafeArea(
           child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                onTap: () {},
-              ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.search))
-            ],
+          TextField(
+            controller: _searchTc,
+            decoration: InputDecoration(
+              prefixIcon: searchIcon(),
+              hintText: '검색',
+            ),
+            onTap: () {},
           ),
-          ListView(),
+          // ListView(),
         ],
       )),
     );
