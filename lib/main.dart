@@ -3,8 +3,10 @@ import 'package:mask_stock/model/store.dart';
 import 'package:mask_stock/viewmodel/store_vm.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(ChangeNotifierProvider.value(value: StoreViewModel(), child: MyApp(),));
-
+void main() => runApp(ChangeNotifierProvider.value(
+      value: StoreViewModel(),
+      child: MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -22,19 +24,17 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  // @override
+  // void initState() {
+  //   super.initState();
 
-
-    // @override
-    // void initState() {
-    //   super.initState();
-
-    // then -> fetch 함수가 이뤄진 다음 이루어져야하는 부분
-    //   storeService.fetch().then((fetchStores) {
-    //     setState(() {
-    //       storeList = fetchStores;
-    //     });
-    //   });
-    // }
+  // then -> fetch 함수가 이뤄진 다음 이루어져야하는 부분
+  //   storeService.fetch().then((fetchStores) {
+  //     setState(() {
+  //       storeList = fetchStores;
+  //     });
+  //   });
+  // }
 
   Widget _buildremainState(Store store) {
     var remainState = '판매중지';
@@ -83,34 +83,45 @@ class MyHomePage extends StatelessWidget {
     final storeViewModel = Provider.of<StoreViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('마스크 재고 존재 장소 전체 : ${storeViewModel.storeList.where((store) {
+        title:
+            Text('마스크 재고 존재 장소 전체 : ${storeViewModel.storeList.where((store) {
           return store.remainStat == 'plenty' ||
               store.remainStat == 'same' ||
               store.remainStat == 'same';
-        }) .length}'),
+        }).length}'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.refresh), onPressed: () {
-            // 새로고침 기능
-            storeViewModel.fetch();
-          } ),
+          TextButton(
+              onPressed: () {},
+              child: Text(
+                '검색',
+                style: TextStyle(color: Colors.white, fontSize: 15.0),
+              )),
+          IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                // 새로고침 기능
+                storeViewModel.fetch();
+              }),
         ],
       ),
-      body: !storeViewModel.isLoading
-          ? ListView(
-              children: storeViewModel.storeList.where((store) {
-                return store.remainStat == 'plenty' ||
-                    store.remainStat == 'same' ||
-                    store.remainStat == 'same';
-              }) // where 조건에 맞는 데이터만 map으로 list 변환된다.
-                  .map((store) {
-                return ListTile(
-                  title: Text(store.name!),
-                  subtitle: Text(store.addr!),
-                  trailing: _buildremainState(store),
-                );
-              }).toList(),
-            )
-          : LoadingBar(),
+      body: SafeArea(
+        child: !storeViewModel.isLoading
+            ? ListView(
+                children: storeViewModel.storeList.where((store) {
+                  return store.remainStat == 'plenty' ||
+                      store.remainStat == 'same' ||
+                      store.remainStat == 'same';
+                }) // where 조건에 맞는 데이터만 map으로 list 변환된다.
+                    .map((store) {
+                  return ListTile(
+                    title: Text(store.name!),
+                    subtitle: Text(store.addr!),
+                    trailing: _buildremainState(store),
+                  );
+                }).toList(),
+              )
+            : LoadingBar(),
+      ),
     );
   }
 }
