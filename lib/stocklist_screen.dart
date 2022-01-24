@@ -84,7 +84,7 @@ class StockListScreen extends StatelessWidget {
               icon: Icon(Icons.refresh),
               onPressed: () {
                 // 새로고침 기능
-                storeViewModel.getStockService();
+                storeViewModel.getStock();
               }),
         ],
       ),
