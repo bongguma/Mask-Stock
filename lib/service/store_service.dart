@@ -4,7 +4,7 @@ import 'package:mask_stock/model/store.dart';
 
 class StoreService {
 
-  Future<List<Store>> getStock() async {
+  Future<List<Store>> getStock(double lat, double lng) async {
     List<Store>? storeList = [];
 
     // setState(() {
@@ -13,7 +13,7 @@ class StoreService {
     // });
 
     var uri =
-        'https://gist.githubusercontent.com/junsuk5/bb7485d5f70974deee920b8f0cd1e2f0/raw/063f64d9b343120c2cb01a6555cf9b38761b1d94/sample.json';
+        'https://gist.githubusercontent.com/junsuk5/bb7485d5f70974deee920b8f0cd1e2f0/raw/063f64d9b343120c2cb01a6555cf9b38761b1d94/sample.json?lat=$lat&lng=$lng';
 
     // get 방식이 비동기로 받아와 await 키워드가 존재하지 않을 시, response값 안에 데이터가 없을 수도 있다.
     var response = await http.get(Uri.parse(uri));
