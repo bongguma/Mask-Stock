@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mask_stock/model/store.dart';
 
 class StoreService {
+
   Future<List<Store>> getStock() async {
     List<Store>? storeList = [];
 
@@ -36,7 +37,11 @@ class StoreService {
     // log('Response body :: ${response.body}');  // 통신 데이터 출력
     // log('storeList json result :: ${jsonResult['stores']}'); // json형식 storeList
 
-    return storeList;
+    return storeList.where((store) {
+      return store.remainStat == 'plenty' ||
+          store.remainStat == 'same' ||
+          store.remainStat == 'same';
+    }).toList();
   }
 
   Future<List<Store>> getSearchStock(String storeName) async {

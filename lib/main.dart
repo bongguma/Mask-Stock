@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mask_stock/model/store.dart';
-import 'package:mask_stock/search_screen.dart';
-import 'package:mask_stock/stocklist_screen.dart';
+import 'package:mask_stock/screen/search_screen.dart';
+import 'package:mask_stock/screen/stocklist_screen.dart';
 import 'package:mask_stock/viewmodel/store_vm.dart';
 import 'package:provider/provider.dart';
 

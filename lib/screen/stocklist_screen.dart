@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mask_stock/layout/remain_state_tile.dart';
 import 'package:mask_stock/model/store.dart';
 import 'package:mask_stock/viewmodel/store_vm.dart';
 import 'package:provider/provider.dart';
@@ -18,59 +19,13 @@ class StockListScreen extends StatelessWidget {
   //   });
   // }
 
-  Widget _buildremainState(Store store) {
-    var remainState = '판매중지';
-    var description = '';
-    var color = Colors.black;
-
-    switch (store.remainStat) {
-      case 'plenty':
-        remainState = '충분';
-        description = '100개 이상';
-        color = Colors.green;
-        break;
-      case 'some':
-        remainState = '보통';
-        description = '30개 이상';
-        color = Colors.yellow;
-        break;
-      case 'few':
-        remainState = '부족';
-        description = '2~30개';
-        color = Colors.red;
-        break;
-      case 'empty':
-        remainState = '소진임박';
-        description = '1개 이하';
-        color = Colors.grey;
-        break;
-    }
-
-    return Column(
-      children: <Widget>[
-        Text(
-          remainState,
-          style: TextStyle(color: color, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          description,
-          style: TextStyle(color: color),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final storeViewModel = Provider.of<StoreViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         title:
-            Text('마스크 재고 존재 장소 전체 : ${storeViewModel.storeList.where((store) {
-          return store.remainStat == 'plenty' ||
-              store.remainStat == 'same' ||
-              store.remainStat == 'same';
-        }).length}'),
+            Text('마스크 재고 존재 장소 전체 : ${storeViewModel.storeList.length}곳'),
         actions: <Widget>[
           TextButton(
               onPressed: () {
@@ -91,16 +46,12 @@ class StockListScreen extends StatelessWidget {
       body: SafeArea(
         child: !storeViewModel.isLoading
             ? ListView(
-                children: storeViewModel.storeList.where((store) {
-                  return store.remainStat == 'plenty' ||
-                      store.remainStat == 'same' ||
-                      store.remainStat == 'same';
-                }) // where 조건에 맞는 데이터만 map으로 list 변환된다.
+                children: storeViewModel.storeList // where 조건에 맞는 데이터만 map으로 list 변환된다.
                     .map((store) {
                   return ListTile(
                     title: Text(store.name!),
                     subtitle: Text(store.addr!),
-                    trailing: _buildremainState(store),
+                    trailing: ReaminStateTile(store),
                   );
                 }).toList(),
               )
