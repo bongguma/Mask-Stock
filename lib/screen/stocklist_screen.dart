@@ -48,11 +48,7 @@ class StockListScreen extends StatelessWidget {
             ? ListView(
                 children: storeViewModel.storeList // where 조건에 맞는 데이터만 map으로 list 변환된다.
                     .map((store) {
-                  return ListTile(
-                    title: Text(store.name!),
-                    subtitle: Text(store.addr!),
-                    trailing: ReaminStateTile(store),
-                  );
+                  return ReaminStateTile(store);
                 }).toList(),
               )
             : LoadingBar(),

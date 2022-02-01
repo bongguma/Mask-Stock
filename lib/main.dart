@@ -7,7 +7,7 @@ import 'package:mask_stock/viewmodel/store_vm.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();  // runApp 호출 전 바인딩을 초기화해야하는 경우 호출
 
   runApp(ChangeNotifierProvider.value(
     value: StoreViewModel(),
