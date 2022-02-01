@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_stock/model/store.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class ReaminStateTile extends StatelessWidget {
   final Store store;
@@ -10,7 +12,25 @@ class ReaminStateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return _buildremainState(store);
+    return  ListTile(
+      title: Text(store.name!),
+      subtitle: Text(store.addr!),
+      trailing: _buildremainState(store),
+      onTap: () {
+        _googleMapAction(store.lat!, store.lng!);
+      },
+    );
+    // return _buildremainState(store);
+  }
+
+  _googleMapAction(num lat, num lng) async {
+    final url = 'https://google.com/maps/search/?api=1&query=$lat,$lng';
+
+    if(await canLaunch(url)){
+      await launch(url);
+    } else {
+      throw '지도 연결이 불가합니다.{$url}';
+    }
   }
 
   Widget _buildremainState(Store store) {
