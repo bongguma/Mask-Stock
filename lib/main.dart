@@ -6,10 +6,14 @@ import 'package:mask_stock/screen/stocklist_screen.dart';
 import 'package:mask_stock/viewmodel/store_vm.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(ChangeNotifierProvider.value(
-      value: StoreViewModel(),
-      child: MyApp(),
-    ));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(ChangeNotifierProvider.value(
+    value: StoreViewModel(),
+    child: MyApp(),
+  ));
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
